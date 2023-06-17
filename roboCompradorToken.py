@@ -5,8 +5,8 @@ import json
 
 # Configurar a conexão com a rede Ethereum
 web3 = Web3(Web3.HTTPProvider('https://rpc.buildbear.io/multiple-jek-tono-porkins-7d39950a'))
-print("Está conectado:"+str(web3.isConnected()))
-print("Número do Bloco:"+str(web3.eth.blockNumber))
+print("O Bot está conectado:"+str(web3.isConnected()))
+#print("Número do Bloco:"+str(web3.eth.blockNumber))
 
 chain_id = 9234
 
@@ -19,7 +19,7 @@ contract_Address = '0xa69811F48350A2C839eCED6b6b258200c427b7bB'  # Substitua pel
 contract_abi = json.loads('[ 	{ 		"inputs": [ 			{ 				"internalType": "uint256", 				"name": "amount", 				"type": "uint256" 			} 		], 		"name": "buyTokens", 		"outputs": [], 		"stateMutability": "nonpayable", 		"type": "function" 	}, 	{ 		"inputs": [ 			{ 				"internalType": "uint256", 				"name": "amount", 				"type": "uint256" 			} 		], 		"name": "sellTokens", 		"outputs": [], 		"stateMutability": "nonpayable", 		"type": "function" 	}, 	{ 		"inputs": [ 			{ 				"internalType": "address", 				"name": "_token1Address", 				"type": "address" 			}, 			{ 				"internalType": "address", 				"name": "_token2Address", 				"type": "address" 			} 		], 		"stateMutability": "nonpayable", 		"type": "constructor" 	}, 	{ 		"inputs": [ 			{ 				"internalType": "uint256", 				"name": "amount", 				"type": "uint256" 			} 		], 		"name": "withdrawTokens", 		"outputs": [], 		"stateMutability": "nonpayable", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "getPrice", 		"outputs": [ 			{ 				"internalType": "uint256", 				"name": "", 				"type": "uint256" 			} 		], 		"stateMutability": "pure", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "ownerToken1", 		"outputs": [ 			{ 				"internalType": "address", 				"name": "", 				"type": "address" 			} 		], 		"stateMutability": "view", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "token1Address", 		"outputs": [ 			{ 				"internalType": "address", 				"name": "", 				"type": "address" 			} 		], 		"stateMutability": "view", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "token2Address", 		"outputs": [ 			{ 				"internalType": "address", 				"name": "", 				"type": "address" 			} 		], 		"stateMutability": "view", 		"type": "function" 	} ]')
 
 # Limiar de preço para comprar ou vender tokens
-buy_threshold = 1.0  # Substitua pelo limiar de preço desejado para compra
+buy_threshold = 2.0  # Substitua pelo limiar de preço desejado para compra
 
 # Criar uma instância do contrato TokenMarketplace
 contract = web3.eth.contract(address=contract_Address, abi=contract_abi)
@@ -57,12 +57,12 @@ if __name__ == '__main__':
     #token_contract_address = '0x8a1786e9D08c2E5C898343321DdE988e4bbdec0e'  # Substitua pelo endereço do contrato do token ERC-20
     #token_amount_to_approve = 700000  # Substitua pela quantidade de tokens que deseja aprovar
     #approve_token_spending(token_contract_address, token_amount_to_approve)
-    print("Olá sou o Robô comprador de Token, para interromper o robô pressione ao mesmo tempo CTRL + C")
-
+    print("Olá sou o Bot Comprador de Token, para interromper o robô pressione ao mesmo tempo CTRL + C")
+    time.sleep(20)
     while not stop_order:
         token_price = get_token_price()
         print("Preço do Token:"+str(token_price))
-
+        time.sleep(10)
         if token_price <= buy_threshold:
             print("O Preço é menor que o limiar de compra de "+str(buy_threshold))
             print("Portanto, vou comprar token")
@@ -71,6 +71,6 @@ if __name__ == '__main__':
                     
 
         # Aguardar um tempo antes de verificar novamente o preço
-        time.sleep(60)  # Substitua pelo intervalo desejado em segundos
+        time.sleep(20)  # Substitua pelo intervalo desejado em segundos
         
         
