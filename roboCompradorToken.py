@@ -19,7 +19,7 @@ contract_Address = '0xa69811F48350A2C839eCED6b6b258200c427b7bB'  # Substitua pel
 contract_abi = json.loads('[ 	{ 		"inputs": [ 			{ 				"internalType": "uint256", 				"name": "amount", 				"type": "uint256" 			} 		], 		"name": "buyTokens", 		"outputs": [], 		"stateMutability": "nonpayable", 		"type": "function" 	}, 	{ 		"inputs": [ 			{ 				"internalType": "uint256", 				"name": "amount", 				"type": "uint256" 			} 		], 		"name": "sellTokens", 		"outputs": [], 		"stateMutability": "nonpayable", 		"type": "function" 	}, 	{ 		"inputs": [ 			{ 				"internalType": "address", 				"name": "_token1Address", 				"type": "address" 			}, 			{ 				"internalType": "address", 				"name": "_token2Address", 				"type": "address" 			} 		], 		"stateMutability": "nonpayable", 		"type": "constructor" 	}, 	{ 		"inputs": [ 			{ 				"internalType": "uint256", 				"name": "amount", 				"type": "uint256" 			} 		], 		"name": "withdrawTokens", 		"outputs": [], 		"stateMutability": "nonpayable", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "getPrice", 		"outputs": [ 			{ 				"internalType": "uint256", 				"name": "", 				"type": "uint256" 			} 		], 		"stateMutability": "pure", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "ownerToken1", 		"outputs": [ 			{ 				"internalType": "address", 				"name": "", 				"type": "address" 			} 		], 		"stateMutability": "view", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "token1Address", 		"outputs": [ 			{ 				"internalType": "address", 				"name": "", 				"type": "address" 			} 		], 		"stateMutability": "view", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "token2Address", 		"outputs": [ 			{ 				"internalType": "address", 				"name": "", 				"type": "address" 			} 		], 		"stateMutability": "view", 		"type": "function" 	} ]')
 
 # Limiar de preço para comprar ou vender tokens
-buy_threshold = 2.0  # Substitua pelo limiar de preço desejado para compra
+buy_threshold = 1.0  # Substitua pelo limiar de preço desejado para compra
 
 # Criar uma instância do contrato TokenMarketplace
 contract = web3.eth.contract(address=contract_Address, abi=contract_abi)
@@ -46,7 +46,7 @@ def get_token_price():
     # Por exemplo, você pode usar uma API externa para obter o preço ou calcular localmente com base em dados disponíveis
     # Aqui está um exemplo fictício que retorna um valor aleatório entre 1.0 e 3.0:
     import random
-    return round(random.uniform(1.0, 1.0), 2)
+    return round(random.uniform(0, 2.0), 2)
 
 
 # Exemplo de uso
@@ -58,17 +58,19 @@ if __name__ == '__main__':
     #token_amount_to_approve = 700000  # Substitua pela quantidade de tokens que deseja aprovar
     #approve_token_spending(token_contract_address, token_amount_to_approve)
     print("Olá sou o Bot Comprador de Token, para interromper o robô pressione ao mesmo tempo CTRL + C")
-    time.sleep(20)
+    time.sleep(5)
     while not stop_order:
         token_price = get_token_price()
         print("Preço do Token:"+str(token_price))
-        time.sleep(10)
+        time.sleep(5)
         if token_price <= buy_threshold:
             print("O Preço é menor que o limiar de compra de "+str(buy_threshold))
             print("Portanto, vou comprar token")
             # Comprar tokens se o preço estiver abaixo ou igual ao limiar de compra
             buy_tokens(100)  # Substitua pelo valor desejado para compra
-                    
+        else:
+            print("Não irei comprar porque o preço está acima do limiar de compra:")
+
 
         # Aguardar um tempo antes de verificar novamente o preço
         time.sleep(20)  # Substitua pelo intervalo desejado em segundos
