@@ -1,18 +1,15 @@
 from web3 import Web3
-import os
 import time
 import json
 
 # Configurar a conexão com a rede Ethereum
 web3 = Web3(Web3.HTTPProvider('https://rpc.buildbear.io/multiple-jek-tono-porkins-7d39950a'))
-print("Está conectado:"+str(web3.isConnected()))
-print("Número do Bloco:"+str(web3.eth.blockNumber))
-
+print("O Bot está conectado:"+str(web3.isConnected()))
 chain_id = 9234
 
 # Chaves privadas e endereços Ethereum
-account = "0x2c24d0B31583912a9461FC95DFc200B53bca4e6A"
-private_key = 'c58517d6dfc740985bb51e0293c6d5dce4ddbfa730edd097ca70d3e877e8b21e'
+account = "0xc144cD60Be02F5d5C6CFfcb56DcE32D99097Afb9"
+private_key = '3cd656d14571c2f3c39b97dc273060f7653ec6c2fbbb916e717b4e9f1e28f147'
 
 # Endereço e ABI do contrato TokenMarketplace
 contract_Address = '0xa69811F48350A2C839eCED6b6b258200c427b7bB'  # Substitua pelo endereço do contrato TokenMarketplace
@@ -54,16 +51,16 @@ if __name__ == '__main__':
     stop_order = False  # Variável para controlar a ordem de parada do robô
 
     print("Olá sou o Robô Vendedor de Token, para interromper o robô pressione ao mesmo tempo CTRL + C")
-
+    time.sleep(5)
     while not stop_order:
         token_price = get_token_price()
         print("Preço do Token:"+str(token_price))
-         
+         time.sleep(5) 
 
         if token_price >= sell_threshold:
             # Vender tokens se o preço estiver acima ou igual ao limiar de venda
-            print("O Preço é menor que o limiar de compra de "+str(buy_threshold))
-            print("Portanto, vou comprar token")
+            print("O Preço é maior que o limiar de venda de "+str(buy_threshold))
+            print("Portanto, vou vender token")
             sell_tokens(50)  # Substitua pelo valor desejado para venda
 
         # Aguardar um tempo antes de verificar novamente o preço
