@@ -1,5 +1,4 @@
 from web3 import Web3
-import os
 import time
 import json
 
@@ -15,7 +14,7 @@ account = "0x2c24d0B31583912a9461FC95DFc200B53bca4e6A"
 private_key = 'c58517d6dfc740985bb51e0293c6d5dce4ddbfa730edd097ca70d3e877e8b21e'
 
 # Endereço e ABI do contrato TokenMarketplace
-contract_Address = '0xa69811F48350A2C839eCED6b6b258200c427b7bB'  # Substitua pelo endereço do contrato TokenMarketplace
+contract_Address = '0xB47bea8b9De7699F38f09864356117737980eDB2'  # Substitua pelo endereço do contrato TokenMarketplace
 contract_abi = json.loads('[ 	{ 		"inputs": [ 			{ 				"internalType": "uint256", 				"name": "amount", 				"type": "uint256" 			} 		], 		"name": "buyTokens", 		"outputs": [], 		"stateMutability": "nonpayable", 		"type": "function" 	}, 	{ 		"inputs": [ 			{ 				"internalType": "uint256", 				"name": "amount", 				"type": "uint256" 			} 		], 		"name": "sellTokens", 		"outputs": [], 		"stateMutability": "nonpayable", 		"type": "function" 	}, 	{ 		"inputs": [ 			{ 				"internalType": "address", 				"name": "_token1Address", 				"type": "address" 			}, 			{ 				"internalType": "address", 				"name": "_token2Address", 				"type": "address" 			} 		], 		"stateMutability": "nonpayable", 		"type": "constructor" 	}, 	{ 		"inputs": [ 			{ 				"internalType": "uint256", 				"name": "amount", 				"type": "uint256" 			} 		], 		"name": "withdrawTokens", 		"outputs": [], 		"stateMutability": "nonpayable", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "getPrice", 		"outputs": [ 			{ 				"internalType": "uint256", 				"name": "", 				"type": "uint256" 			} 		], 		"stateMutability": "pure", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "ownerToken1", 		"outputs": [ 			{ 				"internalType": "address", 				"name": "", 				"type": "address" 			} 		], 		"stateMutability": "view", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "token1Address", 		"outputs": [ 			{ 				"internalType": "address", 				"name": "", 				"type": "address" 			} 		], 		"stateMutability": "view", 		"type": "function" 	}, 	{ 		"inputs": [], 		"name": "token2Address", 		"outputs": [ 			{ 				"internalType": "address", 				"name": "", 				"type": "address" 			} 		], 		"stateMutability": "view", 		"type": "function" 	} ]')
 
 # Limiar de preço para comprar ou vender tokens
@@ -23,8 +22,6 @@ buy_threshold = 1.0  # Substitua pelo limiar de preço desejado para compra
 
 # Criar uma instância do contrato TokenMarketplace
 contract = web3.eth.contract(address=contract_Address, abi=contract_abi)
-
-nonce = web3.eth.getTransactionCount(account)
 
 def buy_tokens(amount_to_buy):
     # Implementar a lógica para comprar tokens
@@ -53,10 +50,6 @@ def get_token_price():
 if __name__ == '__main__':
     stop_order = False  # Variável para controlar a ordem de parada do robô
 
-    # 1. Aprovar o contrato TokenMarketplace para gastar tokens
-    #token_contract_address = '0x8a1786e9D08c2E5C898343321DdE988e4bbdec0e'  # Substitua pelo endereço do contrato do token ERC-20
-    #token_amount_to_approve = 700000  # Substitua pela quantidade de tokens que deseja aprovar
-    #approve_token_spending(token_contract_address, token_amount_to_approve)
     print("Olá sou o Bot Comprador de Token, para interromper o robô pressione ao mesmo tempo CTRL + C")
     time.sleep(5)
     while not stop_order:
