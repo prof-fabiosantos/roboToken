@@ -101,7 +101,6 @@ PROFITABILITY = 1.1;#10% - define o percentual de lucro que você quer ter em ci
 # Limiar de preço para vender tokens
 sell_threshold = 200  # Substitua pelo limiar de preço desejado para venda
 
-
 async def main():
     stop_order = False  # Variável para controlar a ordem de parada do robô
 
@@ -113,7 +112,7 @@ async def main():
         token_symbol = "WBNB"
         try:
             token_price = await get_price(token_symbol)        
-            print("Preço do Token:"+str(token_price))
+            print("Preço em dolar do Token:"+str(token_price))
         except Exception as e:
             print("Error:", str(e))
         time.sleep(5) 
@@ -124,8 +123,10 @@ async def main():
             print("Portanto, vou vender token")
 
             # Exemplo de uso para trocar WBNB por CAKE na BSC Testnet
-            token_in_address = '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd'  # Endereço do token de entrada (por exemplo, WBNB na BSC Testnet)
-            token_out_address = '0x8d008B313C1d6C7fE2982F62d32Da7507cF43551'  # Substitua pelo endereço do token de saída desejado na BSC Testnet7
+            # Endereço do contrato do token WBNB
+            token_in_address = '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd' 
+            # Endereço do contrato do token CAKE
+            token_out_address = '0x8d008B313C1d6C7fE2982F62d32Da7507cF43551' 
             amount_in_tokens = 0.001  # Quantidade de tokens de entrada (por exemplo, 0.001 BNB)
 
             transaction1_hash = approve_spending(token_in_address, pancakeswap_router_address, amount_in_tokens)
