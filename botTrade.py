@@ -10,11 +10,11 @@ w3 = Web3(Web3.HTTPProvider('https://data-seed-prebsc-1-s1.binance.org:8545'))
 print("O Bot está conectado:", w3.isConnected())
 chain_id = 97  # BSC Testnet
 
-# Endereço do contrato de roteamento da PancakeSwap na BSC Testnet
+# Endereço e ABI do contrato de roteamento da PancakeSwap na BSC Testnet
 pancakeswap_router_address = '0xD99D1c33F9fC3444f8101754aBC46c52416550D1'
 contract_abi = json.loads('[{   "inputs": [     {       "internalType": "uint256",       "name": "amountIn",       "type": "uint256"     },     {       "internalType": "uint256",       "name": "amountOutMin",       "type": "uint256"     },     {       "internalType": "address[]",       "name": "path",       "type": "address[]"     },     {       "internalType": "address",       "name": "to",       "type": "address"     },     {       "internalType": "uint256",       "name": "deadline",       "type": "uint256"     }   ],   "name": "swapExactTokensForTokens",   "outputs": [     {       "internalType": "uint256[]",       "name": "amounts",       "type": "uint256[]"     }   ],   "stateMutability": "nonpayable",   "type": "function" }]')
 
-# Chaves privadas e endereços BSC Testnet
+# Chaves endereço e privada da conta do usuário BSC Testnet
 account = "0x2c24d0B31583912a9461FC95DFc200B53bca4e6A"
 private_key = 'c58517d6dfc740985bb51e0293c6d5dce4ddbfa730edd097ca70d3e877e8b21e'
 
@@ -50,19 +50,18 @@ def swap_tokens(token_in, token_out, amount_in):
 
     # Assinar a transação
     signed_transaction = w3.eth.account.signTransaction(transaction, private_key)
-
     # Enviar a transação assinada
     tx_hash = w3.eth.sendRawTransaction(signed_transaction.rawTransaction)
 
     return tx_hash.hex()
 
-
+# Função para aprovar que o contrado de roteamento da PancakeSwap possa transferir tokens da conta do usuário
 def approve_spending(token_address, spender_address, amount):
     w3 = Web3(Web3.HTTPProvider('https://data-seed-prebsc-1-s1.binance.org:8545'))
        
-    # Carregando o contrato do token
+    # ABI do contrato do token WBNB na BSC Testnet
     contract_abi = json.loads('[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"guy","type":"address"},{"name":"wad","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"src","type":"address"},{"name":"dst","type":"address"},{"name":"wad","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"wad","type":"uint256"}],"name":"withdraw","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"dst","type":"address"},{"name":"wad","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"deposit","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"src","type":"address"},{"indexed":true,"name":"guy","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"src","type":"address"},{"indexed":true,"name":"dst","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"dst","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"src","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Withdrawal","type":"event"}]')
-    
+    # Carregando o contrato do token
     token_contract = w3.eth.contract(address=token_address, abi=contract_abi)
 
     # Converter o valor para o formato esperado pelo contrato (em wei)
@@ -107,7 +106,6 @@ async def main():
     print("Olá sou o Robô Vendedor de Token, para interromper o bot pressione ao mesmo tempo CTRL + C")
     time.sleep(5)  
 
-
     while not stop_order:
         token_symbol = "WBNB"
         try:
@@ -123,11 +121,12 @@ async def main():
             print("Portanto, vou vender token")
 
             # Exemplo de uso para trocar WBNB por CAKE na BSC Testnet
+
             # Endereço do contrato do token WBNB
             token_in_address = '0xae13d989daC2f0dEbFf460aC112a837C89BAa7cd' 
             # Endereço do contrato do token CAKE
             token_out_address = '0x8d008B313C1d6C7fE2982F62d32Da7507cF43551' 
-            amount_in_tokens = 0.001  # Quantidade de tokens de entrada (por exemplo, 0.001 BNB)
+            amount_in_tokens = 0.001  # Quantidade de tokens de entrada (por exemplo, 0.001 WBNB)
 
             transaction1_hash = approve_spending(token_in_address, pancakeswap_router_address, amount_in_tokens)
             print("Aprove executado. Hash da transação:", transaction1_hash)
