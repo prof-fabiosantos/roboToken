@@ -1,9 +1,9 @@
-from web3 import Web3
-import json
-from datetime import datetime, timedelta
-import time
-import aiohttp
-import asyncio
+from web3 import Web3 # biblioteca Python que permite interagir com uma rede Ethereum ou BSC
+import json # oferece suporte para trabalhar com dados no formato JSON
+from datetime import datetime, timedelta # fornece classes e funções para trabalhar com datas e horários
+import time #  oferece funções relacionadas ao tempo, como medir intervalos de tempo,
+import aiohttp # é uma biblioteca Python usada para realizar requisições HTTP assíncronas
+import asyncio #oferece suporte para programação assíncrona em Python. 
 
 # Configure a conexão Web3 com a BSC Testnet (por exemplo, usando o provedor do Infura)
 w3 = Web3(Web3.HTTPProvider('https://data-seed-prebsc-1-s1.binance.org:8545'))
@@ -14,7 +14,7 @@ chain_id = 97  # BSC Testnet
 pancakeswap_router_address = '0xD99D1c33F9fC3444f8101754aBC46c52416550D1'
 contract_abi = json.loads('[{   "inputs": [     {       "internalType": "uint256",       "name": "amountIn",       "type": "uint256"     },     {       "internalType": "uint256",       "name": "amountOutMin",       "type": "uint256"     },     {       "internalType": "address[]",       "name": "path",       "type": "address[]"     },     {       "internalType": "address",       "name": "to",       "type": "address"     },     {       "internalType": "uint256",       "name": "deadline",       "type": "uint256"     }   ],   "name": "swapExactTokensForTokens",   "outputs": [     {       "internalType": "uint256[]",       "name": "amounts",       "type": "uint256[]"     }   ],   "stateMutability": "nonpayable",   "type": "function" }]')
 
-# Chaves endereço e privada da conta do usuário BSC Testnet
+# Chaves endereço e privada da conta do usuário BSC Testnet - Metamask
 account = "0x2c24d0B31583912a9461FC95DFc200B53bca4e6A"
 private_key = 'c58517d6dfc740985bb51e0293c6d5dce4ddbfa730edd097ca70d3e877e8b21e'
 
@@ -57,7 +57,7 @@ def swap_tokens(token_in, token_out, amount_in):
 
 # Função para aprovar que o contrado de roteamento da PancakeSwap possa transferir tokens da conta do usuário
 def approve_spending(token_address, spender_address, amount):
-    w3 = Web3(Web3.HTTPProvider('https://data-seed-prebsc-1-s1.binance.org:8545'))
+    #w3 = Web3(Web3.HTTPProvider('https://data-seed-prebsc-1-s1.binance.org:8545'))
        
     # ABI do contrato do token WBNB na BSC Testnet
     contract_abi = json.loads('[{"constant":true,"inputs":[],"name":"name","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"guy","type":"address"},{"name":"wad","type":"uint256"}],"name":"approve","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"totalSupply","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"src","type":"address"},{"name":"dst","type":"address"},{"name":"wad","type":"uint256"}],"name":"transferFrom","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[{"name":"wad","type":"uint256"}],"name":"withdraw","outputs":[],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":true,"inputs":[],"name":"decimals","outputs":[{"name":"","type":"uint8"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"}],"name":"balanceOf","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":true,"inputs":[],"name":"symbol","outputs":[{"name":"","type":"string"}],"payable":false,"stateMutability":"view","type":"function"},{"constant":false,"inputs":[{"name":"dst","type":"address"},{"name":"wad","type":"uint256"}],"name":"transfer","outputs":[{"name":"","type":"bool"}],"payable":false,"stateMutability":"nonpayable","type":"function"},{"constant":false,"inputs":[],"name":"deposit","outputs":[],"payable":true,"stateMutability":"payable","type":"function"},{"constant":true,"inputs":[{"name":"","type":"address"},{"name":"","type":"address"}],"name":"allowance","outputs":[{"name":"","type":"uint256"}],"payable":false,"stateMutability":"view","type":"function"},{"payable":true,"stateMutability":"payable","type":"fallback"},{"anonymous":false,"inputs":[{"indexed":true,"name":"src","type":"address"},{"indexed":true,"name":"guy","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"src","type":"address"},{"indexed":true,"name":"dst","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"dst","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Deposit","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"name":"src","type":"address"},{"indexed":false,"name":"wad","type":"uint256"}],"name":"Withdrawal","type":"event"}]')
@@ -85,6 +85,7 @@ def approve_spending(token_address, spender_address, amount):
 
 TOKEN_OUT = "0x55d398326f99059fF775485246999027B3197955"
 
+# Função para obter o preço em dolar do token que será vendido
 async def get_price(token_symbol):
     async with aiohttp.ClientSession() as session:
         url = f"https://bsc.api.0x.org/swap/v1/price?sellToken={token_symbol}&buyToken={TOKEN_OUT}&sellAmount=1000000000000000000"
